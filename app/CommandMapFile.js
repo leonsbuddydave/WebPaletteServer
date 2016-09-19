@@ -1,8 +1,12 @@
 'use strict';
 
+var fs = require('fs');
+
+var UNIQUE_FIELDS = ['name'];
+
 module.exports = class CommandMapFile {
-	constructor(contents) {
-		this.contents = contents;
+	constructor(file) {
+		this.contents = fs.readFileSync(file, 'utf-8');
 		this.metadata = {};
 		this.regexes = null;
 		this.parseMetadata();
@@ -35,5 +39,12 @@ module.exports = class CommandMapFile {
 				return true;
 			}
 		});
+
+		// For 'unique' fields, we just take the first one
+		UNIQUE_FIELDS.forEach((field) => {
+			if (typeof this.metadata[field] !== 'undefined') {
+				this.metadata[field] = this.metadata[field][0];
+			}	
+		})
 	}
 }

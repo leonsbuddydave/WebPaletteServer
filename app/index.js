@@ -18,8 +18,10 @@ if (argv.mode === 'dev') {
 }
 
 APP.get('/', (req, res) => {
-	console.log('Got it!');
-	res.json({});
+	var maps = itemMap.get(req.query.url);
+	res.json({
+		maps: (maps || {})
+	});
 });
 
 APP.listen(PORT, () => {
