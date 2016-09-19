@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 var argv = require('yargs').argv;
+var fs = require('fs-extra');
+var Git = require('nodegit');
 var $ = require('gulp-load-plugins')();
 
 // Use the one provided or make the assumption that these projects
@@ -16,9 +18,18 @@ gulp.task('dev', () => {
 	})
 });
 
-gulp.task('start', () => {
+gulp.task('clean', (cb) => {
+	fs.remove('./tmp', cb);
+});
+
+gulp.task('retrieve-command-maps', ['clean'], (cb) => {
+	Git.Clone('https://github.com/leonsbuddydave/WebPaletteDefinitions.git', './tmp')
+		.then(() => cb());
+});
+
+gulp.task('start', ['retrieve-command-maps'], () => {
 	$.nodemon({
 		script: 'app/index.js',
-		args: ['--port=' + PORT]
+		args: ['--port=' + PORT, '--command-map-dir=./tmp/definitions/']
 	})
 });

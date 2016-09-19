@@ -10,12 +10,12 @@ const PORT = argv.port;
 
 const itemMap = new RegexItemMap();
 
-if (argv.mode === 'dev') {
+// if (argv.mode === 'dev') {
 	console.info('Running in development mode; pulling command maps from local file system.');
 	const populator = new LocalFileCommandMapPopulator(itemMap, argv.commandMapDir);
-} else {
+// } else {
 	// throw new Error('Non-development mode not supported yet.');
-}
+// }
 
 APP.get('/', (req, res) => {
 	var maps = itemMap.get(req.query.url);
