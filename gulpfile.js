@@ -6,6 +6,8 @@ var $ = require('gulp-load-plugins')();
 // are in the same directory
 var commandMapDir = argv.commandMapDir || '../WebPaletteDefinitions/definitions/';
 
+var PORT = argv.port || 6969;
+
 gulp.task('dev', () => {
 	$.nodemon({
 		script: 'app/index.js',
@@ -15,7 +17,8 @@ gulp.task('dev', () => {
 });
 
 gulp.task('start', () => {
-	$nodemon({
-		script: 'app/index.js'
+	$.nodemon({
+		script: 'app/index.js',
+		args: ['--port=' + PORT]
 	})
 });
