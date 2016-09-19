@@ -1,7 +1,8 @@
 var gulp = require('gulp');
 var argv = require('yargs').argv;
 var fs = require('fs-extra');
-var Git = require('nodegit');
+var request = require('request');
+var AdmZip = require('adm-zip');
 var $ = require('gulp-load-plugins')();
 
 // Use the one provided or make the assumption that these projects
@@ -19,12 +20,19 @@ gulp.task('dev', () => {
 });
 
 gulp.task('clean', (cb) => {
-	fs.remove('./tmp', cb);
+	fs.remove('./tmp', () => {
+		fs.mkdir('./tmp', cb);	
+	});
 });
 
 gulp.task('retrieve-command-maps', ['clean'], (cb) => {
-	Git.Clone('https://github.com/leonsbuddydave/WebPaletteDefinitions.git', './tmp')
-		.then(() => cb());
+	request('http://github.com/leonsbuddydave/WebPaletteDefinitions/archive/master.zip')
+		.pipe(fs.createWriteStream('./tmp/WebPaletteDefinitions.zip'))
+		.on('finish', () => {
+			var zip = new AdmZip('./tmp/WebPaletteDefinitions.zip');
+			zip.extractEntryTo('WebPaletteDefinitions-master/definitions/', './tmp/definitions', false, true);
+			cb();
+		});
 });
 
 gulp.task('start', ['retrieve-command-maps'], () => {

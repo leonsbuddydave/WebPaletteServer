@@ -11,12 +11,12 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "aws-sdk": "^2.4.0",
     "express": "^4.14.0",
     "fs-extra": "^0.30.0",
     "glob": "^7.0.4",
     "gulp": "^3.9.1",
-    "nodegit": "^0.16.0",
     "nodemon": "^1.9.2",
     "yargs": "^4.7.1"
   },
